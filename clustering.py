@@ -16,7 +16,7 @@ import sys
 np.random.seed(341)
 
 # Replace digits with time series dataset
-filename = "output_correct.txt"
+filename = "./DATA/raw_ts_data.txt"
 
 def parseData(filename, datapts, losses, ids):
     f = open(filename)
@@ -113,14 +113,13 @@ plt.imshow(Z, interpolation='nearest',
            cmap=plt.cm.Paired,
            aspect='auto', origin='lower')
 
-plt.plot(reduced_data[:, 0], reduced_data[:, 1], 'k.', markersize=2)
+plt.plot(reduced_data[:, 0], reduced_data[:, 1], 'k.', markersize=4)
 # Plot the centroids as a white X
 centroids = kmeans.cluster_centers_
 plt.scatter(centroids[:, 0], centroids[:, 1],
             marker='x', s=169, linewidths=3,
-            color='w', zorder=10)
-plt.title('K-means clustering on the scaled time series dataset (PCA-reduced data)\n'
-          'Centroids are marked with white cross')
+            color=['w','b','r'], zorder=10)
+plt.title('K-means clustering on the scaled raw time series dataset (PCA-reduced data)\n')
 plt.xlim(x_min, x_max)
 plt.ylim(y_min, y_max)
 plt.xticks(())

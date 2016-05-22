@@ -19,7 +19,7 @@ from sklearn.preprocessing import scale
 import sys
 import math
 
-filename = "output_correct.txt"
+filename = "./DATA/raw_ts_data.txt"
 
 def parseData(filename, datapts, losses, ids):
     f = open(filename)
@@ -52,9 +52,7 @@ def plotFourierRow(row):
     N = len(row)
 
     # sample spacing
-    ###???? what is this? time, right? time between observations?
     T = 93.0/129
-    ###????
 
     x = np.linspace(0.0, N*T, N)
     y = np.sin(50.0 * 2.0*np.pi*x) + 0.5*np.sin(80.0 * 2.0*np.pi*x)
@@ -92,6 +90,7 @@ print(fTransformed.shape)
 
 # print data.shape, fTransformed.shape
 # plotFourierRow(fTransformed[200])
+# sys.exit(1)
 
 # Input: X Matrix (each row is a training point)
 # Output: A vector of labels, corresponding to row indices
@@ -138,8 +137,8 @@ bench_k_means(KMeans(init='random', n_clusters=k, n_init=10),
 # in this case the seeding of the centers is deterministic, hence we run the
 # kmeans algorithm only once with n_init=1
 pca = PCA(n_components=k).fit(data)
-print(pca.components_)
-print(len(pca.components_[1]))
+#print(pca.components_)
+#print(len(pca.components_[1]))
 
 bench_k_means(KMeans(init=pca.components_, n_clusters=k, n_init=1),
               name="PCA-based",
@@ -179,7 +178,6 @@ plt.plot(reduced_data[:, 0], reduced_data[:, 1], 'k.', markersize=4)
 # Plot the centroids as a white X
 centroids = kmeans.cluster_centers_
 
-'''
 # Go through dataset and associate labels to clusters
 mapping = {0: [], 1: [], 2: []}
 for i, point in enumerate(reduced_data):
@@ -191,10 +189,13 @@ for i, point in enumerate(reduced_data):
     if (dist < min_dist):
         min_dist = dist
         closest_centroid = centroid_index
-    mapping[closest_centroid].append(labels[i])
+  mapping[closest_centroid].append(labels[i])
 
 #print(mapping)
+print(len(mapping[0]), len(mapping[1]), len(mapping[2]))
+sys.exit(1)
 
+'''
 for label in mapping[2]:
     filename = "SquiggleExamples/" + label
     img = Image.open(filename)
@@ -207,8 +208,7 @@ plt.scatter(centroids[:, 0], centroids[:, 1],
             marker='x', s=169, linewidths=3,
             color=['w','b','r'], zorder=10)
 
-plt.title('K-means clustering on the scaled DTFT dataset (PCA-reduced data)\n'
-          'Centroids are marked with white cross')
+plt.title('K-means clustering on the scaled DTFT dataset (PCA-reduced data)\n')
 plt.xlim(x_min, x_max)
 plt.ylim(y_min, y_max)
 plt.xticks(())
