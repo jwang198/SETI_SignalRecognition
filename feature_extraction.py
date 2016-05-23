@@ -27,6 +27,11 @@ ids = []
 arima = []
 parseData(data1, datapts, losses, ids)
 
+# Normalize ts to mean 0
+datapts = np.array(datapts)
+mean = np.mean(datapts,axis=0) #column mean
+datapts = datapts - mean
+
 f = open(data2)
 f.readline()
 for line in f:
@@ -41,6 +46,7 @@ for i, ts in enumerate(temp):
     raw_mean.append(np.mean(ts))
     raw_variance.append(np.var(ts))
 
+### NOTE: FEATURES ARE RAW, UNSCALED
 #Ouput features as ts_dataset.csv
 output_file = open("official_ts_dataset.csv", 'w')
 output_file.write("\"id\",\"loss\",\"AR\",\"MA\",\"raw_mean\",\"raw_variance\",{0}\n".format(",".join(["\"X" + str(x) + "\"" for x in range(1,130)])))
@@ -61,10 +67,3 @@ for i, ID in enumerate(ids):
   output_file.write("\"{0}\",{1},{2},{3},{4},{5},{6}\n".format(ID, losses[i], arima[i][0], arima[i][1], raw_mean[i], raw_variance[i],",".join([str(x) for x in list(fTransformed[i])])))
 
 output_file.close()
-
-
-#print(datapts)
-#print(losses)
-#print(ids)
-
-
