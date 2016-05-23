@@ -40,6 +40,15 @@ for i, ts in enumerate(temp):
     raw_mean.append(np.mean(ts))
     raw_variance.append(np.var(ts))
 
+'''
+# Extract arima(1,1,1) params
+f = open(data2)
+f.readline()
+for line in f:
+    line = line.strip().split(",")
+    arima.append([float(line[1]) if line[1] != 'NA' else 0.0, float(line[2]) if line[2] != 'NA' else 0.0])
+'''
+
 #Ouput features as ts_dataset.csv
 output_file = open("official_ts_dataset_nonsquiggle.csv", 'w')
 output_file.write("\"id\",\"loss\",{0}\n".format(",".join(["\"X" + str(x) + "\"" for x in range(1,130)])))
