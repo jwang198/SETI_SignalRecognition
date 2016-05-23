@@ -70,16 +70,14 @@ losses = []
 ids = []
 parseData(filename, datapts, losses, ids)
 
-'''
 #Ouput time series datapoints as ts_dataset.csv
 output_file = open("official_ts_dataset.csv", 'w')
 output_file.write("\"id\",\"loss\",{0}\n".format(",".join(["\"X" + str(x) + "\"" for x in range(1,130)])))
 for i, ID in enumerate(ids):
-  output_file.write("\"{0}\",{1},{2}\n".format(ID, losses[i], ",".join([str(x) for x in list(datapts[i])])))
+  output_file.write("\"{0}\",{1},{2},{3}\n".format(ID, losses[i], ",".join([str(x) for x in list(datapts[i])])))
 
 output_file.close()
 sys.exit(1)
-'''
 
 fTransformed = abs(np.array([np.fft.fft(row, n) for row in datapts]))
 fTransformed = fTransformed[:,1:n//2]

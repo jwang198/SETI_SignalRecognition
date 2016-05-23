@@ -126,7 +126,7 @@ int main(int argc, char* argv[]) {
     struct dirent *ent;
     char* filename;
 
-    if ((dir = opendir ("SquiggleExamples/")) != NULL) {
+    if ((dir = opendir ("/Users/Jason/Desktop/WaterfallPlots/")) != NULL) {
          /* print all the files and directories within directory */
         while ((ent = readdir (dir)) != NULL) {
             printf("%s\n", ent->d_name);
@@ -135,7 +135,7 @@ int main(int argc, char* argv[]) {
                 continue;
             }
 
-            string prefix = "./SquiggleExamples/";
+            string prefix = "/Users/Jason/Desktop/WaterfallPlots/";
             string temp = prefix + file;
             filename = (char *)malloc(temp.size() + 1);
             memcpy(filename, temp.c_str(), temp.size() + 1);
