@@ -1,5 +1,0 @@
-cmake_minimum_required(VERSION 2.8)
-project( dp_algo )
-find_package( OpenCV REQUIRED )
-add_executable( dp_algo dp_algo.cpp )
-target_link_libraries( dp_algo ${OpenCV_LIBS} )
