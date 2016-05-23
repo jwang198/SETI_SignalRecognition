@@ -27,17 +27,18 @@ losses = []
 ids = []
 parseData(data1, datapts, losses, ids)
 
-# Normalize ts to mean 0
-datapts = np.array(datapts)
-mean = np.mean(datapts,axis=0) #column mean
-datapts = datapts - mean
+# Normalize ts to mean 0: subtract mean of each row
+datapts = np.array(datapts).astype(float)
+mean = np.mean(datapts,axis=1) #row means
+for i in range(len(datapts)):
+    datapts[i,:] = datapts[i,:].astype(float) - mean[i]
 
-raw_mean = []
+#raw_mean = []
 raw_variance = []
 
 temp = np.array(datapts)
 for i, ts in enumerate(temp):
-    raw_mean.append(np.mean(ts))
+    #raw_mean.append(np.mean(ts))
     raw_variance.append(np.var(ts))
 
 '''
