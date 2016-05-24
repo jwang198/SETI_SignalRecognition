@@ -49,7 +49,7 @@ plot(train.roc,colorize=FALSE, col="black")
 lines(c(0,1),c(0,1),col = "gray", lty = 4 )
 performance(train.pred, measure = "auc")@y.values #AUC
 max(performance(train.pred, measure="acc")@y.values[[1]]) #ACC
-plot(performance(train.pred, measure="acc")@y.values[[1]]) # varying ACC
+plot(performance(train.pred, measure="acc")) # varying ACC
 
 #test set performance: validation set error
 test.fit <- predict(lasso.cv,newx=data.matrix(test.indep),s="lambda.1se",type = "response")
@@ -61,7 +61,7 @@ plot(test.roc,colorize=FALSE, col="black")
 lines(c(0,1),c(0,1),col = "gray", lty = 4 )
 performance(test.pred, measure = "auc")@y.values
 max(performance(test.pred, measure="acc")@y.values[[1]]) #ACC
-plot(performance(test.pred, measure="acc")@y.values[[1]]) # varying ACC
+plot(performance(test.pred, measure="acc")) # varying ACC
 
 #simple logistic: baseline?
 glm.fit <- glm(as.factor(train.labels) ~ ., data = data.frame(train.indep), family = binomial())
@@ -72,8 +72,7 @@ plot(glm.test.roc,colorize=FALSE, col="black")
 lines(c(0,1),c(0,1),col = "gray", lty = 4 )
 
 performance(glm.test.pred, measure = "auc")@y.values #True positive v.s. False positive (AUC of TPR v.s. FPR plot)
-plot(performance(glm.test.pred, measure = "acc")) #Varying by cutoff
 max(performance(glm.test.pred, measure="acc")@y.values[[1]]) #ACC
-plot(performance(glm.test.pred, measure="acc")@y.values[[1]]) # varying ACC
+plot(performance(glm.test.pred, measure="acc")) # varying ACC
 
 
