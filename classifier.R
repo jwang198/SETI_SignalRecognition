@@ -39,7 +39,7 @@ lambda_1se <- lasso.cv$lambda.1se
 #Print min lambda
 lambda_min <- lasso.cv$lambda.min
 
-#training set performance
+#training set performance: cross validation error
 train.fit <- predict(lasso.cv,newx=data.matrix(train.indep),s="lambda.1se",type = "response")
 train.pred <- prediction(train.fit, train.labels)
 # Obtain performance statistics
@@ -47,9 +47,11 @@ train.pred <- prediction(train.fit, train.labels)
 train.roc <- performance(train.pred, measure = "tpr", x.measure = "fpr")
 plot(train.roc,colorize=FALSE, col="black")
 lines(c(0,1),c(0,1),col = "gray", lty = 4 )
-performance(train.pred, measure = "auc")@y.values
+performance(train.pred, measure = "auc")@y.values #AUC
+max(performance(train.pred, measure="acc")@y.values[[1]]) #ACC
+plot(performance(train.pred, measure="acc")@y.values[[1]]) # varying ACC
 
-#test set performance
+#test set performance: validation set error
 test.fit <- predict(lasso.cv,newx=data.matrix(test.indep),s="lambda.1se",type = "response")
 test.pred <- prediction(test.fit, test.labels)
 # Obtain performance statistics
@@ -58,9 +60,10 @@ test.roc <- performance(test.pred, measure = "tpr", x.measure = "fpr")
 plot(test.roc,colorize=FALSE, col="black")
 lines(c(0,1),c(0,1),col = "gray", lty = 4 )
 performance(test.pred, measure = "auc")@y.values
+max(performance(test.pred, measure="acc")@y.values[[1]]) #ACC
+plot(performance(test.pred, measure="acc")@y.values[[1]]) # varying ACC
 
 #simple logistic: baseline?
-
 glm.fit <- glm(as.factor(train.labels) ~ ., data = data.frame(train.indep), family = binomial())
 glm.probs <- predict.glm(glm.fit, newdata = data.frame(test.indep), type = "response")
 glm.test.pred = prediction(glm.probs, test.labels)
@@ -70,3 +73,7 @@ lines(c(0,1),c(0,1),col = "gray", lty = 4 )
 
 performance(glm.test.pred, measure = "auc")@y.values #True positive v.s. False positive (AUC of TPR v.s. FPR plot)
 plot(performance(glm.test.pred, measure = "acc")) #Varying by cutoff
+max(performance(glm.test.pred, measure="acc")@y.values[[1]]) #ACC
+plot(performance(glm.test.pred, measure="acc")@y.values[[1]]) # varying ACC
+
+
