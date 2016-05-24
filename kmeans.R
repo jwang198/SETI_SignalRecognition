@@ -1,3 +1,4 @@
+set.seed(341)
 raw_X <- read.table("/Users/Jason/Desktop/SETI_TimeSeries/DATA/official_ts_dataset_dft.csv", header=TRUE, sep=",", row.names="id")
 #print(X1)
 
@@ -44,7 +45,7 @@ summary(fit) # display the best model
 X <- data.frame(X, fit$cluster)
 
 # K-Means Clustering: Round 2 (Minus Cluster 1)
-fit <- kmeans(X[X[,69] != 1,1:68], centers=3, nstart=10)
+fit <- kmeans(X[X[,69] != 1,1:68], centers=2, nstart=10)
 aggregate(X[X[,69] != 1,1:68],by=list(fit$cluster),FUN=mean)
 
 # Cluster Plot against 1st 2 principal components
@@ -77,7 +78,7 @@ library(fpc)
 plotcluster(X[X[,70] != 1,1:68], fit$cluster,cex=1)
 
 ##################################
-X <- data.frame(X[X[,70] != 1,1:68], fit$cluster)
+X <- data.frame(X[X[,70] != 1,], fit$cluster)
 
 # K-Means Clustering: Round 4 (Minus Cluster 1''')
 fit <- kmeans(X[X[,71] != 1,1:68], centers=3, nstart=10)
@@ -95,7 +96,7 @@ library(fpc)
 plotcluster(X[X[,71] != 1,1:68], fit$cluster,cex=1)
 
 ##################################
-X <- data.frame(X[X[,71] != 1,1:68], fit$cluster)
+X <- data.frame(X[X[,71] != 1,], fit$cluster)
 
 # K-Means Clustering: Round 5 (Minus Cluster 1'''')
 fit <- kmeans(X[X[,72] != 1,1:68], centers=3, nstart=10)
@@ -111,3 +112,39 @@ clusplot(X[X[,72] != 1,1:68], fit$cluster, color=TRUE, shade=TRUE,
 # Centroid Plot against 1st 2 discriminant functions
 library(fpc)
 plotcluster(X[X[,72] != 1,1:68], fit$cluster,cex=1)
+
+##################################
+X <- data.frame(X[X[,72] != 1,], fit$cluster)
+
+# K-Means Clustering: Round 6 (Minus Cluster 1''''')
+fit <- kmeans(X[X[,73] != 1,1:68], centers=3, nstart=10)
+aggregate(X[X[,73] != 1,1:68],by=list(fit$cluster),FUN=mean)
+
+# Cluster Plot against 1st 2 principal components
+
+# vary parameters for most readable graph
+library(cluster) 
+clusplot(X[X[,73] != 1,1:68], fit$cluster, color=TRUE, shade=TRUE, 
+         labels=1, lines=0, cex=1)
+
+# Centroid Plot against 1st 2 discriminant functions
+library(fpc)
+plotcluster(X[X[,73] != 1,1:68], fit$cluster,cex=1)
+
+##################################
+X <- data.frame(X[X[,73] != 1,], fit$cluster)
+
+# K-Means Clustering: Round 7 (Minus Cluster 1'''''')
+fit <- kmeans(X[X[,74] != 1,1:68], centers=3, nstart=10)
+aggregate(X[X[,74] != 1,1:68],by=list(fit$cluster),FUN=mean)
+
+# Cluster Plot against 1st 2 principal components
+
+# vary parameters for most readable graph
+library(cluster) 
+clusplot(X[X[,74] != 1,1:68], fit$cluster, color=TRUE, shade=TRUE, 
+         labels=1, lines=0, cex=1)
+
+# Centroid Plot against 1st 2 discriminant functions
+library(fpc)
+plotcluster(X[X[,74] != 1,1:68], fit$cluster,cex=1)
