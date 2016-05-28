@@ -22,27 +22,7 @@ def hurst(p):
     return hurst  
 
 with open('./DATA/Squiggles(833)/COMPLETE_squiggle_dft.csv', 'rU') as csvinput:
-    with open('./DATA/Squiggles(833)/COMPLETE_squiggle_dft_hurst_log.csv', 'w') as csvoutput:
-            reader = csv.DictReader(csvinput)
-            fieldnames = reader.fieldnames + ['Hurst']
-
-            writer = csv.DictWriter(csvoutput, fieldnames = fieldnames)
-            writer.writeheader()
-
-            rows = []
-            for row in reader:
-                x = []
-                #print row
-                for i in range(1, 64):
-                    x.append(row['X' + str(i)])
-                x = np.array([log(float(i)) for i in x])
-                row['Hurst'] = hurst(x)
-                rows.append(row)
-
-            writer.writerows(rows)
-
-with open('./DATA/Squiggles(833)/COMPLETE_squiggle_dft.csv', 'rU') as csvinput:
-    with open('./DATA/Squiggles(833)/COMPLETE_squiggle_dft_hurst_nolog.csv', 'w') as csvoutput:
+    with open('./DATA/Squiggles(833)/COMPLETE_squiggle_dft_hurst.csv', 'w') as csvoutput:
             reader = csv.DictReader(csvinput)
             fieldnames = reader.fieldnames + ['Hurst']
 
@@ -61,29 +41,8 @@ with open('./DATA/Squiggles(833)/COMPLETE_squiggle_dft.csv', 'rU') as csvinput:
 
             writer.writerows(rows)
 
-'''
 with open('./DATA/Squiggles(833)/COMPLETE_squiggle_raw.csv', 'rU') as csvinput:
-    with open('./DATA/Squiggles(833)/COMPLETE_squiggle_raw_hurst_log.csv', 'w') as csvoutput:
-            reader = csv.DictReader(csvinput)
-            fieldnames = reader.fieldnames + ['Hurst']
-
-            writer = csv.DictWriter(csvoutput, fieldnames = fieldnames)
-            writer.writeheader()
-
-            rows = []
-            for row in reader:
-                x = []
-                for i in range(1, 130):
-                    x.append(row['X' + str(i)])
-                x = np.array([log(float(i)) for i in x])
-                row['Hurst'] = hurst(x)
-                rows.append(row)
-
-            writer.writerows(rows)
-'''
-
-with open('./DATA/Squiggles(833)/COMPLETE_squiggle_raw.csv', 'rU') as csvinput:
-    with open('./DATA/Squiggles(833)/COMPLETE_squiggle_raw_hurst_nolog.csv', 'w') as csvoutput:
+    with open('./DATA/Squiggles(833)/COMPLETE_squiggle_raw_hurst.csv', 'w') as csvoutput:
             reader = csv.DictReader(csvinput)
             fieldnames = reader.fieldnames + ['Hurst']
 
