@@ -59,3 +59,22 @@ with open('./DATA/Squiggles(833)/COMPLETE_squiggle_raw.csv', 'rU') as csvinput:
                 rows.append(row)
 
             writer.writerows(rows)
+
+with open('./DATA/Squiggles(833)/COMPLETE_unknown_raw.csv', 'rU') as csvinput:
+    with open('./DATA/Squiggles(833)/COMPLETE_unknown_raw_hurst.csv', 'w') as csvoutput:
+            reader = csv.DictReader(csvinput)
+            fieldnames = reader.fieldnames + ['Hurst']
+
+            writer = csv.DictWriter(csvoutput, fieldnames = fieldnames)
+            writer.writeheader()
+
+            rows = []
+            for row in reader:
+                x = []
+                for i in range(1, 130):
+                    x.append(row['X' + str(i)])
+                x = np.array([float(i) for i in x])
+                row['Hurst'] = hurst(x)
+                rows.append(row)
+
+            writer.writerows(rows)
