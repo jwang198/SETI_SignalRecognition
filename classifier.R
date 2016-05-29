@@ -2,18 +2,18 @@ library(glmnet)
 library(ROCR)
 
 #read data
-raw_squiggle <- read.table("/Users/Jason/Desktop/SETI_TimeSeries/DATA/official_ts_dataset_dft.csv", header=TRUE, sep=",", row.names="id")
+raw_squiggle <- read.table("/Users/Jason/Desktop/SETI_TimeSeries/DATA/Squiggles(833)/COMPLETE_squiggle_dft.csv", header=TRUE, sep=",", row.names="id")
 raw_nonsquiggle <- read.table("/Users/Jason/Desktop/SETI_TimeSeries/DATA/official_ts_dataset_nonsquiggle_dft.csv", header=TRUE, sep=",", row.names="id")
 
-raw_squiggle <- cbind(raw_squiggle, label = T)
-raw_nonsquiggle <- cbind(raw_nonsquiggle, label = F)
+raw_squiggle <- cbind(raw_squiggle, label = 1)
+raw_nonsquiggle <- cbind(raw_nonsquiggle, label = 0)
 
 #put all the data together
 data <- rbind(raw_squiggle, raw_nonsquiggle)
 #scale data
 data[,1:(ncol(data)-1)] <- scale(data[,1:(ncol(data)-1)]) #SCALE AFTER CONCATENATING
 data[,1:5] <- data[,1:5]*sqrt(63) 
-
+data <- cbind(intercept = 1, data)
 #randomize the dataset
 data.randomized <- data[sample(nrow(data)), ]
 
@@ -25,6 +25,40 @@ train.labels <- train[,ncol(train)]
 test <- data.randomized[(split+1):nrow(data.randomized), ]
 test.indep <- test[,1:(ncol(test)-1)]
 test.labels <- test[,ncol(test)]
+
+#use only loss as classifier
+train.loss <- train.indep[,c(1:2,5)]
+test.loss <- test.indep[,c(1:2,5)]
+
+
+
+#JUST LOSS
+#training set performance: cross validation error
+lasso.cv <- cv.glmnet(x=data.matrix(train.loss), y=train.labels, family = "binomial")
+plot(lasso.cv)
+train.fit <- predict(lasso.cv,newx=data.matrix(train.loss),s="lambda.1se",type = "response")
+train.pred <- prediction(train.fit, train.labels)
+# Obtain performance statistics
+# Plot ROC
+train.roc <- performance(train.pred, measure = "tpr", x.measure = "fpr")
+plot(train.roc,colorize=FALSE, col="black")
+lines(c(0,1),c(0,1),col = "gray", lty = 4 )
+performance(train.pred, measure = "auc")@y.values #AUC
+max(performance(train.pred, measure="acc")@y.values[[1]]) #ACC
+plot(performance(train.pred, measure="acc")) # varying ACC
+
+#test set performance: validation set error
+test.fit <- predict(lasso.cv,newx=data.matrix(test.loss),s="lambda.1se",type = "response")
+test.pred <- prediction(test.fit, test.labels)
+# Obtain performance statistics
+# Plot ROC
+test.roc <- performance(test.pred, measure = "tpr", x.measure = "fpr")
+plot(test.roc,colorize=FALSE, col="black")
+lines(c(0,1),c(0,1),col = "gray", lty = 4 )
+performance(test.pred, measure = "auc")@y.values
+max(performance(test.pred, measure="acc")@y.values[[1]]) #ACC
+plot(performance(test.pred, measure="acc")) # varying ACC
+#################################
 
 par(mfrow=c(1, 1))
 # Control randomness in Lasso CV fit

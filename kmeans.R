@@ -10,8 +10,15 @@ colMeans(X)
 
 # 68 FEATURES TOTAL
 
-# K-Means Clustering
-fit <- kmeans(X, centers=3, nstart=10)
+# Iterative K-Means Clustering
+
+### Choose Number of Clusters: 8
+wss <- (nrow(X)-1)*sum(apply(X,2,var))
+for (i in 2:15) wss[i] <- sum(kmeans(X,centers=i)$withinss)
+plot(1:15, wss, type="b", xlab="Number of Clusters",
+     ylab="Within groups sum of squares")
+
+fit <- kmeans(X, centers=8, nstart=10)
 aggregate(X,by=list(fit$cluster),FUN=mean)
 
 # Cluster Plot against 1st 2 principal components
@@ -20,32 +27,17 @@ aggregate(X,by=list(fit$cluster),FUN=mean)
 library(cluster) 
 clusplot(X, fit$cluster, color=TRUE, shade=TRUE, 
          labels=1, lines=0, cex=1)
+#text(X, labels=fit$cluster, col=fit$cluster)
 
 # Centroid Plot against 1st 2 discriminant functions
 library(fpc)
 plotcluster(X, fit$cluster,cex=1)
 
 ##################################
-# Ward Hierarchical Clustering
-d <- dist(X, method = "euclidean") # distance matrix
-fit <- hclust(d, method="ward") 
-plot(fit, cex=0.3) # display dendogram
-groups <- cutree(fit, k=3) # cut tree into 5 clusters
-# draw dendogram with red borders around the 5 clusters 
-rect.hclust(fit, k=3, border="red")
-
-##################################
-# Model Based Clustering
-library(mclust)
-fit <- Mclust(X)
-plot(fit) # plot results 
-summary(fit) # display the best model
-
-##################################
 X <- data.frame(X, fit$cluster)
 
 # K-Means Clustering: Round 2 (Minus Cluster 1)
-fit <- kmeans(X[X[,69] != 1,1:68], centers=2, nstart=10)
+fit <- kmeans(X[X[,69] != 1,1:68], centers=3, nstart=10)
 aggregate(X[X[,69] != 1,1:68],by=list(fit$cluster),FUN=mean)
 
 # Cluster Plot against 1st 2 principal components
@@ -148,3 +140,43 @@ clusplot(X[X[,74] != 1,1:68], fit$cluster, color=TRUE, shade=TRUE,
 # Centroid Plot against 1st 2 discriminant functions
 library(fpc)
 plotcluster(X[X[,74] != 1,1:68], fit$cluster,cex=1)
+
+#Cluster using only modulation and variance
+####################################### 
+X <- X[,4:5]
+
+# K-Means Clustering
+fit <- kmeans(X, centers=8, nstart=10)
+aggregate(X,by=list(fit$cluster),FUN=mean)
+
+# Cluster Plot against 1st 2 principal components
+
+# vary parameters for most readable graph
+library(cluster) 
+clusplot(X, fit$cluster, color=TRUE, shade=TRUE, 
+         labels=1, lines=0, cex=1)
+
+# Centroid Plot against 1st 2 discriminant functions
+library(fpc)
+plotcluster(X, fit$cluster,cex=1)
+
+wss <- (nrow(X)-1)*sum(apply(X,2,var))
+for (i in 2:15) wss[i] <- sum(kmeans(X,centers=i)$withinss)
+plot(1:15, wss, type="b", xlab="Number of Clusters",
+     ylab="Within groups sum of squares")
+
+##################################
+# Ward Hierarchical Clustering
+d <- dist(X, method = "euclidean") # distance matrix
+fit <- hclust(d, method="ward") 
+plot(fit, cex=0.3) # display dendogram
+groups <- cutree(fit, k=3) # cut tree into 5 clusters
+# draw dendogram with red borders around the 5 clusters 
+rect.hclust(fit, k=3, border="red")
+
+##################################
+# Model Based Clustering
+library(mclust)
+fit <- Mclust(X)
+plot(fit) # plot results 
+summary(fit) # display the best model
