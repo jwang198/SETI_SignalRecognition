@@ -74,7 +74,7 @@ lambda_1se <- lasso.cv$lambda.1se
 lambda_min <- lasso.cv$lambda.min
 
 #training set performance: cross validation error
-train.fit <- predict(lasso.cv,newx=data.matrix(train.indep),s="lambda.1se",type = "response")
+train.fit <- predict(lasso.cv,newx=dat  a.matrix(train.indep),s="lambda.1se",type = "response")
 train.pred <- prediction(train.fit, train.labels)
 # Obtain performance statistics
 # Plot ROC
