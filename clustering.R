@@ -118,7 +118,7 @@ cluster4$fit.cluster <- clusterNum
 squiggleCopy = squiggleCopy[squiggleCopy$fit.cluster != toString(closestCluster),]
 squiggleCopy$fit.cluster <- NULL
 
-###Round 4###
+###Round 5###
 clusterNum = clusterNum + 1
 wss <- (nrow(squiggleCopy)-1)*sum(apply(squiggleCopy,2,var))
 for (i in 2:15) wss[i] <- sum(kmeans(squiggleCopy, 

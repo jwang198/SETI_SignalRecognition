@@ -86,7 +86,11 @@ def main():
             widths[row_index] = width
             #print(upper, lower)
 
-        width_vector[count] = np.median(widths)
+        #width_vector[count] = np.median(widths)
+
+        widths = np.sort(widths)
+        iqr_average = np.mean( widths[round(0.25*len(widths)) : round(0.75*len(widths)) ])
+        width_vector[count] = iqr_average
         count += 1
 
     print(width_vector)
