@@ -3,4 +3,4 @@ This project was conducted in partnership with SETI (Search for Extraterrestrial
 
 We have included scripts for both data extraction and analysis. Most notable is the dynamic programming algorithm that converts spectrogram images into discrete time series datapoints (scripts/extraction/path_tracer.cpp).
 
-The project has dependency on OpenCV (C++): opencv.org
+The project has dependency on OpenCV (C++): http://opencv.org
